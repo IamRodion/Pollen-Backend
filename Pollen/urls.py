@@ -16,8 +16,22 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+from api.views import CreateUserView
 
 urlpatterns = [
+    # URLs del panel de administración de Django
     path('admin/', admin.site.urls),
+
+    # URLs de JWT
+    path('api/token/', TokenObtainPairView.as_view(), name='get_tokens'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='refresh_token'),
+
+    # URLs de aplicaciones
+    path('api/user/register/', CreateUserView.as_view(), name="register"),
+    path('api-auth/', include('rest_framework.urls')),
     path('api/', include('api.urls')), # Añade las URLs de la aplicación "api"
 ]
